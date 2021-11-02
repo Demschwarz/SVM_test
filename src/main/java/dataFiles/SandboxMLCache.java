@@ -38,10 +38,14 @@ import java.util.*;
  * Common utility code used in some ML examples to set up test cache.
  */
 public class SandboxMLCache {
-    /** */
+    /**
+     *
+     */
     private final Ignite ignite;
 
-    /** */
+    /**
+     *
+     */
     public SandboxMLCache(Ignite ignite) {
         this.ignite = ignite;
     }
@@ -126,21 +130,36 @@ public class SandboxMLCache {
             double[] data = new double[cells.length];
             NumberFormat format = NumberFormat.getInstance(Locale.FRANCE);
 
-            if (cells[0].equals("1") || cells[0].equals("0")) {
-                for (int i = 0; i < cells.length; i++)
+//            if (cells[0].equals("1") || cells[0].equals("0")) {
+//                for (int i = 0; i < cells.length; i++)
+//                    try {
+//                        if (cells[i].isEmpty()) data[i] = Double.NaN;
+//                        else data[i] = Double.valueOf(cells[i]);
+//                    } catch (NumberFormatException e) {
+//                        try {
+//                            data[i] = format.parse(cells[i]).doubleValue();
+//                        }
+//                        catch (ParseException e1) {
+//                            throw new FileParsingException(cells[i], i, Paths.get(dataset.getFileName()));
+//                        }
+//                    }
+//                cache.put(cnt++, VectorUtils.of(data));
+//            }
+            for (int i = 0; i < cells.length; i++)
+                try {
+                    if (cells[i].isEmpty()) data[i] = Double.NaN;
+                    else data[i] = Double.valueOf(cells[i]);
+                } catch (NumberFormatException e) {
                     try {
-                        if (cells[i].isEmpty()) data[i] = Double.NaN;
-                        else data[i] = Double.valueOf(cells[i]);
-                    } catch (NumberFormatException e) {
-                        try {
-                            data[i] = format.parse(cells[i]).doubleValue();
-                        }
-                        catch (ParseException e1) {
-                            throw new FileParsingException(cells[i], i, Paths.get(dataset.getFileName()));
-                        }
+                        data[i] = format.parse(cells[i]).doubleValue();
+                    } catch (ParseException e1) {
+                        throw new FileParsingException(cells[i], i, Paths.get(dataset.getFileName()));
                     }
-                cache.put(cnt++, VectorUtils.of(data));
-            }
+                }
+            cache.put(cnt++, VectorUtils.of(data));
+//            double[] a = new double[1];
+//            a[0] = cnt;
+//            cache.put(cnt++, VectorUtils.of(a));
         }
         return cache;
     }
@@ -225,8 +244,9 @@ public class SandboxMLCache {
      */
     private IgniteCache<Integer, Vector> getCache() {
         CacheConfiguration<Integer, Vector> cacheConfiguration = new CacheConfiguration<>();
-        cacheConfiguration.setName("ML_EXAMPLE_" + UUID.randomUUID());
-        cacheConfiguration.setAffinity(new RendezvousAffinityFunction(false, 10));
+//        cacheConfiguration.setName("ML_EXAMPLE_" + UUID.randomUUID());
+        cacheConfiguration.setName("cacheML");
+        cacheConfiguration.setAffinity(new RendezvousAffinityFunction(false, 1024));
 
         return ignite.createCache(cacheConfiguration);
     }

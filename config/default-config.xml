@@ -43,7 +43,7 @@
                         <property name="addresses">
                             <list>
                                 <!-- In distributed environment, replace with actual host IP address. -->
-                                <value>10.0.0.1:47500..47509</value>
+                                <value>DESKTOP-A9C6JGV:47500..47509</value>
                             </list>
                         </property>
                     </bean>
