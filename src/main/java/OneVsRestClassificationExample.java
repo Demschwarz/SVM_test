@@ -70,7 +70,7 @@ public class OneVsRestClassificationExample {
         System.out.println();
         System.out.println(">>> One-vs-Rest SVM Multi-class classification model over cached dataset usage example started.");
         // Start ignite grid.
-        try (Ignite ignite = Ignition.start("config/default-config.xml")) {
+        try (Ignite ignite = Ignition.start("E:/stuff/SVM_test/config/default-config.xml")) {
             System.out.println(">>> Ignite grid started.");
 
 
@@ -96,21 +96,19 @@ public class OneVsRestClassificationExample {
 //                dataCache = new SandboxMLCache(ignite).fillCacheWith(MLSandboxDatasets.MNIST_TRAIN_15);
                 System.out.println("complete, dataCache.size() = " + dataCache.size() + ", time = " + (System.currentTimeMillis() - time) / 1000.0);
                 printKeyAllocation(dataCache);
-//
-////                Affinity affinity=Ignition.ignite().affinity("kdkd");
-////                affinity.mapKeyToNode(1).na
-//                time = System.currentTimeMillis();
-//                SVMLinearClassificationTrainer trainer = new SVMLinearClassificationTrainer();
-//
-//                Vectorizer<Integer, Vector, Integer, Double> vectorizer = new DummyVectorizer<Integer>()
-//                        .labeled(Vectorizer.LabelCoordinate.FIRST);
-//                System.out.print("Start mdl trainer.fit .. ");
-//                SVMLinearClassificationModel mdl = trainer.fit(
-//                        ignite,
-//                        dataCache,
-//                        vectorizer
-//                );
-//                System.out.println("complete, time = " + (System.currentTimeMillis() - time) / 1000.0);
+
+                time = System.currentTimeMillis();
+                SVMLinearClassificationTrainer trainer = new SVMLinearClassificationTrainer();
+
+                Vectorizer<Integer, Vector, Integer, Double> vectorizer = new DummyVectorizer<Integer>()
+                        .labeled(Vectorizer.LabelCoordinate.FIRST);
+                System.out.print("Start mdl trainer.fit .. ");
+                SVMLinearClassificationModel mdl = trainer.fit(
+                        ignite,
+                        dataCache,
+                        vectorizer
+                );
+                System.out.println("complete, time = " + (System.currentTimeMillis() - time) / 1000.0);
             } catch (Exception ex) {
                 ex.printStackTrace();
             } finally {
